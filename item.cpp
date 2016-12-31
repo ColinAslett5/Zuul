@@ -1,3 +1,4 @@
+//Colin Aslett, Item file, C++ Period 07
 #include <iostream>
 #include "item.h"
 using namespace std;

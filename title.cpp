@@ -16,11 +16,11 @@ int main(){
   vector<item*> inventory;
   bool pop = true;
   //items
-  item* flashlight = new item("it shines light on dark objects", false);
-  item* key = new item("A key to...nothing!", false);
-  item* realkey = new item("A working key!", false);
-  item* stick = new item("it's just a stick", false);
-  item* litpaper = new item("Your lit paper that you got a F on...", false);
+  item* flashlight = new item("flashlight", false);
+  item* key = new item("worthlesskey", false);
+  item* realkey = new item("workingkey", false);
+  item* stick = new item("stick", false);
+  item* litpaper = new item("litpaper", false);
   //rooms
   room* yourroom = new room("Your room");
   room* hallway = new room("the hallway");
@@ -72,24 +72,76 @@ int main(){
   mainhallway->exits["south"] = adoor;
   //other variables
   currentroom = kitchen;
+  cout << "Welcome to Zuul, a game about a guy(or girl) that just wants to get outside" << endl;
   while(pop == true){
-    char stra[6];
-    cout << "Welcome to Zuul, a game about a guy(or girl) that just wants to get outside" << endl;
+    char stra[6];//exits
+    char strx[10];//items
     cout << "You are currently in " << currentroom->getDesc() << endl;
+    //exits
     cout << "There are exits:" << endl;
     for(map<const char*, room*, ltstr>::iterator i = currentroom->exits.begin();i != currentroom->exits.end();i++){
-      cout << i->first << endl;
+      cout << i->first << " , ";
     }
-    cin.get(stra,6);
-    for(map<const char*, room*, ltstr>::iterator i = currentroom->exits.begin();i != currentroom->exits.end();i++){
-      if(strcmp(stra,i->first) == 0){
-	currentroom = i->second;
-	break;
+    cout << endl;
+    //printing out items
+    cout << "There are items:" << endl;
+    for(vector<item*>::iterator i = currentroom->itema.begin();i != currentroom->itema.end();i++){
+      cout << (*i)->getDescription() << endl;
+    }
+    //inventory
+    cout << "Current inventory: " << endl;
+    for(vector<item*>::iterator i = inventory.begin();i != inventory.end();i++){
+      cout << (*i)->getDescription() << endl;
+    }
+    cout << "4 possible options('quit','move'.'pick','drop')" << endl;
+    //picking/dropping item
+    cin.getline(strx,10);
+    if(strcmp(strx,"quit") == 0){
+      pop = false;
+      return 0;
+    }
+    if(strcmp(strx,"pick") == 0){
+      char input[50];
+      cout << "enter items name that you want to pick up" << endl;
+      cin.getline(input,50);
+      bool temp = false;
+      for(vector<item*>::iterator i = currentroom->itema.begin();i != currentroom->itema.end();i++){
+	if(strcmp(input,((*i)->getDescription())) == 0){
+	  inventory.push_back(*i);
+	  currentroom->itema.erase(i);
+	  cout << "YOU PICKED IT UP!" << endl;
+	  temp = true;
+	  break;
+	}
+      }
+      if(temp == false){
+	cout << "YOU DIDN'T PICK IT UP!" << endl;
       }
     }
-    cout << currentroom->getDesc();
-    
-    pop = false;
+    if(strcmp(strx,"drop") == 0){
+
+    }
+    //to leave the room
+    if(strcmp(strx,"move") == 0){
+      cin.getline(stra,6);
+      for(map<const char*, room*, ltstr>::iterator i = currentroom->exits.begin();i != currentroom->exits.end();i++){
+	if(strcmp(stra,i->first) == 0){
+	  currentroom = i->second;
+	  break;
+	}
+	if(currentroom->exits.find(stra) == currentroom->exits.end()){
+	  cout << "No such exit exists!" << endl;
+	  break;//make sure that this works
+	}
+      }
+    }
+    //pop = false;
+    if(currentroom == adoor){
+      cout << "YOU WON!";
+      pop = false;
+      return 0;
+    }
+    //pop = false;
   }
 }
 void inv(vector<item*> &xd){

@@ -1,4 +1,4 @@
-//COlin Aslett
+//COlin Aslett, room header file
 #include <iostream>
 #include <vector>
 #include <map>

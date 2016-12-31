@@ -1,5 +1,6 @@
+//COlin Aslett, item header file, C++ Period 07
 #include <iostream>
-#pragma once;
+#pragma once
 using namespace std;
 class item{
  public:
